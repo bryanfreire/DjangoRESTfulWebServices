@@ -14,7 +14,7 @@ class Drone(models.Model):
     name = models.CharField(max_length = 250)
     drone_category = models.ForeignKey(
         DroneCategory,
-        related_name='drones'
+        related_name='drones',
         on_delete=models.CASCADE
     )
     manufacturing_date = models.DateTimeField()
@@ -61,7 +61,7 @@ class Competition(models.Model):
         Drone,
         on_delete=models.CASCADE
     )
-    distace_in_feet = models.IntegerField()
+    distance_in_feet = models.IntegerField()
     distance_achievement_date = models.DateTimeField()
 
     class Meta:
