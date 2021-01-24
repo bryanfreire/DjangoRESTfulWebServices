@@ -24,7 +24,7 @@ class DroneCategorySerializer(serializers.HyperlinkedModelSerializer):
 
 
 class DroneSerializer(serializers.HyperlinkedModelSerializer):
-    drone_category = serializers.SlugField(
+    drone_category = serializers.SlugRelatedField(
         queryset=DroneCategory.objects.all(),
         slug_field='name',
     )
@@ -79,11 +79,11 @@ class PilotSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class PilotCompetitionSerializer(serializers.ModelSerializer):
-    pilot = serializers.SlugField(
+    pilot = serializers.SlugRelatedField(
         queryset=Pilot.objects.all(),
         slug_field='name',
     )
-    drone = serializers.SlugField(
+    drone = serializers.SlugRelatedField(
         queryset=Drone.objects.all(),
         slug_field='name',
     )
