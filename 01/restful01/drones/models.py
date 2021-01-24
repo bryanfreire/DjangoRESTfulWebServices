@@ -20,7 +20,7 @@ class Drone(models.Model):
     )
     manufacturing_date = models.DateTimeField()
     has_it_competed = models.BooleanField(default=False)
-    inserted_timestamp = models.DateTimeField()
+    inserted_timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ('name',)

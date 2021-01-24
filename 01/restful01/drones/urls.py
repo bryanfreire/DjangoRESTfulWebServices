@@ -15,12 +15,12 @@ def path(url, view):
 
 urlpatterns = [
     path(r'^drone-categories/$', DroneCategoryList),
-    path(r'^drone-categories/(?P<pk>[0-9]+)$', DroneCategoryList),
-    path(r'^drones/$', DroneCategoryList),
-    path(r'^drones/(?P<pk>[0-9]+)$', DroneCategoryList),
-    path(r'^pilots/$', DroneCategoryList),
-    path(r'^pilots/(?P<pk>[0-9]+)$', DroneCategoryList),
-    path(r'^competitions/$', DroneCategoryList),
-    path(r'^competitions/(?P<pk>[0-9]+)$', DroneCategoryList),
+    path(r'^drone-categories/(?P<pk>[0-9]+)$', DroneCategoryDetail),
+    path(r'^drones/$', DroneList),
+    path(r'^drones/(?P<pk>[0-9]+)$', DroneDetail),
+    path(r'^pilots/$', PilotList),
+    path(r'^pilots/(?P<pk>[0-9]+)$', PilotDetail),
+    path(r'^competitions/$', CompetitionList),
+    path(r'^competitions/(?P<pk>[0-9]+)$', CompetitionDetail),
     path(r'^$', ApiRoot)
 ]
