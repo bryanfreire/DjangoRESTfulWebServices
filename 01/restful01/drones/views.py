@@ -2,27 +2,13 @@ from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from django_filters import (
-    FilterSet,
-    AllValuesFilter,
-    DateTimeFilter,
-    NumberFilter,
-)
+import django_filters as filters
 
-from .models import DroneCategory
-from .models import Drone
-from .models import Pilot
-from .models import Competition
-
-from .serializers import DroneCategorySerializer
-from .serializers import DroneSerializer
-from .serializers import PilotSerializer
-from .serializers import PilotCompetitionSerializer
-
+from . import models, serializers
 
 class DroneCategoryList(generics.ListCreateAPIView):
-    queryset = DroneCategory.objects.all()
-    serializer_class = DroneCategorySerializer
+    queryset = models.DroneCategory.objects.all()
+    serializer_class = serializers.DroneCategorySerializer
     name = 'dronecategory-list'
     filter_fields = ('name',)
     search_fields = ('^name',)
@@ -30,14 +16,14 @@ class DroneCategoryList(generics.ListCreateAPIView):
 
 
 class DroneCategoryDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = DroneCategory.objects.all()
-    serializer_class = DroneCategorySerializer
+    queryset = models.DroneCategory.objects.all()
+    serializer_class = serializers.DroneCategorySerializer
     name = 'dronecategory-detail'
 
 
 class DroneList(generics.ListCreateAPIView):
-    queryset = Drone.objects.all()
-    serializer_class = DroneSerializer
+    queryset = models.Drone.objects.all()
+    serializer_class = serializers.DroneSerializer
     name = 'drone-list'
     filter_fields = (
         'name',
@@ -53,14 +39,14 @@ class DroneList(generics.ListCreateAPIView):
 
 
 class DroneDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Drone.objects.all()
-    serializer_class = DroneSerializer
+    queryset = models.Drone.objects.all()
+    serializer_class = serializers.DroneSerializer
     name = 'drone-detail'
 
 
 class PilotList(generics.ListCreateAPIView):
-    queryset = Pilot.objects.all()
-    serializer_class = PilotSerializer
+    queryset = models.Pilot.objects.all()
+    serializer_class = serializers.PilotSerializer
     name = 'pilot-list'
     fielter_fields = (
         'name',
@@ -75,41 +61,41 @@ class PilotList(generics.ListCreateAPIView):
 
 
 class PilotDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Pilot.objects.all()
-    serializer_class = PilotSerializer
+    queryset = models.Pilot.objects.all()
+    serializer_class = serializers.PilotSerializer
     name = 'pilot-detail'
 
 
-class CompetitionFilter(FilterSet):
-    from_achievement_date = DateTimeFilter(
+class CompetitionFilter(filters.FilterSet):
+    from_achievement_date = filters.DateTimeFilter(
         field_name = 'distance_achievement_date',
         lookup_expr='gte',
     )
-    to_achievement_date = DateTimeFilter(
+    to_achievement_date = filters.DateTimeFilter(
         field_name = 'distance_achievement_date',
         lookup_expr='lte',
     )
-    min_distance_in_feet = NumberFilter(
+    min_distance_in_feet = filters.NumberFilter(
         field_name = 'distance_in_feet',
         lookup_expr = 'gte'
     )
-    max_distance_in_feet = NumberFilter(
+    max_distance_in_feet = filters.NumberFilter(
         field_name = 'distance_in_feet',
         lookup_expr = 'lte'
     )
-    drone_name = AllValuesFilter(field_name = 'drone__name')
-    pilot_name = AllValuesFilter(field_name = 'pilot__name')
+    drone_name = filters.AllValuesFilter(field_name = 'drone__name')
+    pilot_name = filters.AllValuesFilter(field_name = 'pilot__name')
 
     class Meta:
-        model = Competition
+        model = models.Competition
         fields = (
             'distance_in_feet',
         )
 
 
 class CompetitionList(generics.ListCreateAPIView):
-    queryset = Competition.objects.all()
-    serializer_class = PilotCompetitionSerializer
+    queryset = models.Competition.objects.all()
+    serializer_class = serializers.PilotCompetitionSerializer
     name = 'competition'
     filter_class = CompetitionFilter
     ordering_fields = (
@@ -119,8 +105,8 @@ class CompetitionList(generics.ListCreateAPIView):
 
 
 class CompetitionDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Competition.objects.all()
-    serializer_class = PilotCompetitionSerializer
+    queryset = models.Competition.objects.all()
+    serializer_class = serializers.PilotCompetitionSerializer
     name = 'competition-detail'
 
 

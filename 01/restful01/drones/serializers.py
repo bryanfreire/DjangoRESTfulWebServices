@@ -1,9 +1,27 @@
-from rest_framework import serializers
+from django.contrib.auth import models as authmodels
 
-from .models import DroneCategory
-from .models import Drone
-from .models import Competition
-from .models import Pilot
+from rest_framework import serializers
+from . import  models
+
+
+class UserDroneSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Drone
+        fields = (
+            'url',
+            'name',
+        )
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = authmodels.User
+        fields = (
+            'url',
+            'pk',
+            'username',
+            'drone',
+        )
 
 
 class DroneCategorySerializer(serializers.HyperlinkedModelSerializer):
@@ -14,7 +32,7 @@ class DroneCategorySerializer(serializers.HyperlinkedModelSerializer):
     )
 
     class Meta:
-        model = DroneCategory
+        model = models.DroneCategory
         fields = (
             'url',
             'pk',
@@ -25,12 +43,13 @@ class DroneCategorySerializer(serializers.HyperlinkedModelSerializer):
 
 class DroneSerializer(serializers.HyperlinkedModelSerializer):
     drone_category = serializers.SlugRelatedField(
-        queryset=DroneCategory.objects.all(),
+        queryset=models.DroneCategory.objects.all(),
         slug_field='name',
     )
+    owner = serializers.ReadOnlyField(source='owner.username')
 
     class Meta:
-        model = Drone
+        model = models.Drone
         fields = (
             'url',
             'name',
@@ -45,7 +64,7 @@ class CompetitionSerializer(serializers.HyperlinkedModelSerializer):
     drone = DroneSerializer()
 
     class Meta:
-        model = Competition
+        model = models.Competition
         fields = (
             'url',
             'pk',
@@ -59,7 +78,7 @@ class CompetitionSerializer(serializers.HyperlinkedModelSerializer):
 class PilotSerializer(serializers.HyperlinkedModelSerializer):
     competitions = CompetitionSerializer(many=True, read_only=True)
     gender = serializers.ChoiceField(
-        choices=Pilot.GENDER_CHOICES,
+        choices=models.Pilot.GENDER_CHOICES,
     )
     gender_description = serializers.CharField(
         source = 'get_gender_display',
@@ -67,7 +86,7 @@ class PilotSerializer(serializers.HyperlinkedModelSerializer):
     )
 
     class Meta:
-        model = Pilot
+        model = models.Pilot
         fields = (
             'url',
             'name',
@@ -81,16 +100,16 @@ class PilotSerializer(serializers.HyperlinkedModelSerializer):
 
 class PilotCompetitionSerializer(serializers.ModelSerializer):
     pilot = serializers.SlugRelatedField(
-        queryset=Pilot.objects.all(),
+        queryset=models.Pilot.objects.all(),
         slug_field='name',
     )
     drone = serializers.SlugRelatedField(
-        queryset=Drone.objects.all(),
+        queryset=models.Drone.objects.all(),
         slug_field='name',
     )
 
     class Meta:
-        model = Competition
+        model = models.Competition
         fields = (
             'url',
             'pk',
