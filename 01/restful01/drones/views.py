@@ -1,6 +1,7 @@
 from rest_framework import generics
 from rest_framework import permissions as rfpermisions
 from rest_framework import authentication as rfauth
+from rest_framework import throttling as rfthrottling
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
@@ -44,6 +45,8 @@ class DroneList(generics.ListCreateAPIView):
         rfpermisions.IsAuthenticatedOrReadOnly,
         permissions.IsCurrentUserOwnerOrReadOnly,
     )
+    throttle_scope = 'drones'
+    throttle_classes = (rfthrottling.ScopedRateThrottle,)
 
     def perform_create(self, serializer):
         serializer.save(owner = self.request.user)
@@ -57,6 +60,8 @@ class DroneDetail(generics.RetrieveUpdateDestroyAPIView):
         rfpermisions.IsAuthenticatedOrReadOnly,
         permissions.IsCurrentUserOwnerOrReadOnly,
     )
+    throttle_scope = 'drones'
+    throttle_classes = (rfthrottling.ScopedRateThrottle,)
 
 
 class PilotList(generics.ListCreateAPIView):
@@ -79,6 +84,8 @@ class PilotList(generics.ListCreateAPIView):
     permission_classes = (
         rfpermisions.IsAuthenticated,
     )
+    throttle_scope = 'pilots'
+    throttle_classes = (rfthrottling.ScopedRateThrottle,)
 
 
 class PilotDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -91,6 +98,8 @@ class PilotDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (
         rfpermisions.IsAuthenticated,
     )
+    throttle_scope = 'pilots'
+    throttle_classes = (rfthrottling.ScopedRateThrottle,)
 
 
 class CompetitionFilter(filters.FilterSet):

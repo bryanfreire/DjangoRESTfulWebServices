@@ -1,6 +1,9 @@
 from django.urls import re_path
 from . import views
 
+
+app_name = 'drones2'
+
 def path(url, view):
     return re_path(url, view.as_view(), name=view.name)
 

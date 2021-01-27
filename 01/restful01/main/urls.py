@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import re_path, include
 
 urlpatterns = [
-    re_path(r'^', include('drones.urls')),
-    re_path(r'^api-auth/', include('rest_framework.urls')),
+    re_path(r'^v1/', include('drones.urls', namespace='v1')),
+    re_path(r'^v1/api-auth/', include('rest_framework.urls', namespace='rf1')),
+    re_path(r'^v2/', include('drones.v2.urls', namespace='v2')),
+    re_path(r'^v2/api-auth/', include('rest_framework.urls', namespace='rf2')),
 ]
