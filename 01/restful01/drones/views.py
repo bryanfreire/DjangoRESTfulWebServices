@@ -1,5 +1,6 @@
 from rest_framework import generics
 from rest_framework import permissions as rfpermisions
+from rest_framework import authentication as rfauth
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
@@ -72,12 +73,24 @@ class PilotList(generics.ListCreateAPIView):
         'name',
         'races_count',
     )
+    authentication_classes = (
+        rfauth.TokenAuthentication,
+    )
+    permission_classes = (
+        rfpermisions.IsAuthenticated,
+    )
 
 
 class PilotDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Pilot.objects.all()
     serializer_class = serializers.PilotSerializer
     name = 'pilot-detail'
+    authentication_classes = (
+        rfauth.TokenAuthentication,
+    )
+    permission_classes = (
+        rfpermisions.IsAuthenticated,
+    )
 
 
 class CompetitionFilter(filters.FilterSet):
