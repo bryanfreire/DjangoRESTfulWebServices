@@ -57,6 +57,7 @@ class DroneSerializer(serializers.HyperlinkedModelSerializer):
             'manufacturing_date',
             'has_it_competed',
             'inserted_timestamp',
+            'owner',
         )
 
 

@@ -1,10 +1,13 @@
 from rest_framework import generics
+from rest_framework import permissions as rfpermisions
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
 import django_filters as filters
 
-from . import models, serializers
+from . import models
+from . import serializers
+from . import permissions
 
 class DroneCategoryList(generics.ListCreateAPIView):
     queryset = models.DroneCategory.objects.all()
@@ -36,12 +39,23 @@ class DroneList(generics.ListCreateAPIView):
         'name',
         'manufacturing_date',
     )
+    permission_classes = (
+        rfpermisions.IsAuthenticatedOrReadOnly,
+        permissions.IsCurrentUserOwnerOrReadOnly,
+    )
+
+    def perform_create(self, serializer):
+        serializer.save(owner = self.request.user)
 
 
 class DroneDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = models.Drone.objects.all()
     serializer_class = serializers.DroneSerializer
     name = 'drone-detail'
+    permission_classes = (
+        rfpermisions.IsAuthenticatedOrReadOnly,
+        permissions.IsCurrentUserOwnerOrReadOnly,
+    )
 
 
 class PilotList(generics.ListCreateAPIView):
